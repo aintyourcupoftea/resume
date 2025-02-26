@@ -154,6 +154,31 @@
             transition: width 0.3s;
         }
 
+        .password-requirements {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin-top: 0.25rem;
+        }
+
+        .requirement i {
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .requirement.valid i {
+            color: var(--success);
+        }
+
+        .requirement.invalid i {
+            color: var(--danger);
+        }
+
         .btn-group {
             display: flex;
             gap: 1rem;
@@ -226,24 +251,54 @@
                 });
             });
 
-            // Password strength meter
+            // Password strength meter and requirements check
             const passwordField = document.getElementById('password');
             const strengthBar = document.querySelector('.password-strength-bar');
             const strengthMeter = document.querySelector('.password-strength');
+            const passwordError = document.getElementById('password-error');
+            
+            // Password requirements
+            const lengthReq = document.getElementById('length-req');
+            const upperReq = document.getElementById('upper-req');
+            const lowerReq = document.getElementById('lower-req');
+            const numberReq = document.getElementById('number-req');
+            const specialReq = document.getElementById('special-req');
+
+            // Password validation patterns
+            const upperCasePattern = /[A-Z]/;
+            const lowerCasePattern = /[a-z]/;
+            const numberPattern = /[0-9]/;
+            const specialCharPattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+            const minLength = 8;
 
             passwordField.addEventListener('input', function(e) {
                 const value = this.value;
+                
+                // Show strength meter if password has any value
                 if (value.length > 0) {
                     strengthMeter.style.display = 'block';
                     
+                    // Check requirements
+                    const hasUpperCase = upperCasePattern.test(value);
+                    const hasLowerCase = lowerCasePattern.test(value);
+                    const hasNumber = numberPattern.test(value);
+                    const hasSpecialChar = specialCharPattern.test(value);
+                    const hasMinLength = value.length >= minLength;
+                    
+                    // Update requirement indicators
+                    updateRequirement(lengthReq, hasMinLength);
+                    updateRequirement(upperReq, hasUpperCase);
+                    updateRequirement(lowerReq, hasLowerCase);
+                    updateRequirement(numberReq, hasNumber);
+                    updateRequirement(specialReq, hasSpecialChar);
+                    
                     // Calculate strength
                     let strength = 0;
-                    if (value.length > 6) strength += 20;
-                    if (value.length > 10) strength += 20;
-                    if (/[a-z]/.test(value)) strength += 10;
-                    if (/[A-Z]/.test(value)) strength += 10;
-                    if (/[0-9]/.test(value)) strength += 20;
-                    if (/[^A-Za-z0-9]/.test(value)) strength += 20;
+                    if (hasMinLength) strength += 20;
+                    if (hasUpperCase) strength += 20;
+                    if (hasLowerCase) strength += 20;
+                    if (hasNumber) strength += 20;
+                    if (hasSpecialChar) strength += 20;
 
                     // Update strength bar
                     strengthBar.style.width = `${strength}%`;
@@ -251,45 +306,75 @@
                     // Set color based on strength
                     if (strength < 40) {
                         strengthBar.style.backgroundColor = '#ef476f';
-                    } else if (strength < 70) {
+                    } else if (strength < 80) {
                         strengthBar.style.backgroundColor = '#ffd166';
                     } else {
                         strengthBar.style.backgroundColor = '#06d6a0';
                     }
+                    
+                    // Clear previous error if password meets all requirements
+                    if (hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && hasMinLength) {
+                        passwordError.style.display = 'none';
+                        passwordField.classList.remove('error');
+                    }
                 } else {
                     strengthMeter.style.display = 'none';
+                    
+                    // Reset requirement indicators
+                    document.querySelectorAll('.requirement').forEach(req => {
+                        req.classList.remove('valid');
+                        req.classList.add('invalid');
+                        req.querySelector('i').className = 'fas fa-times-circle';
+                    });
                 }
             });
+            
+            // Function to update requirement status
+            function updateRequirement(element, isValid) {
+                if (isValid) {
+                    element.classList.remove('invalid');
+                    element.classList.add('valid');
+                    element.querySelector('i').className = 'fas fa-check-circle';
+                } else {
+                    element.classList.remove('valid');
+                    element.classList.add('invalid');
+                    element.querySelector('i').className = 'fas fa-times-circle';
+                }
+            }
 
             // Form validation
             const form = document.getElementById('registration-form');
-            const password = document.getElementById('password');
             const confirmPassword = document.getElementById('confirm-password');
-            const passwordError = document.getElementById('password-error');
-         // Password regex pattern: At least one letter, one number, and between 6-30 characters
-            const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{6,30}$/;
-
+            const confirmPasswordError = document.getElementById('confirm-password-error');
+            
             form.addEventListener('submit', function (e) {
                 let valid = true;
-
-                // Validate password pattern
-                if (!passwordPattern.test(password.value)) {
+                const password = passwordField.value;
+                
+                // Validate password requirements
+                const hasUpperCase = upperCasePattern.test(password);
+                const hasLowerCase = lowerCasePattern.test(password);
+                const hasNumber = numberPattern.test(password);
+                const hasSpecialChar = specialCharPattern.test(password);
+                const hasMinLength = password.length >= minLength;
+                
+                if (!(hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && hasMinLength)) {
                     valid = false;
-                    console.log("Hello");
-                    passwordError.textContent = "Password must be 6-30 characters and include at least one letter and one number.";
+                    passwordError.textContent = "Please meet all password requirements.";
                     passwordError.style.display = 'block';
-                    password.classList.add('error');
+                    passwordField.classList.add('error');
                 } else {
                     passwordError.style.display = 'none';
-                    password.classList.remove('error');
+                    passwordField.classList.remove('error');
                 }
 
                 // Validate password match
-                if (password.value !== confirmPassword.value) {
+                if (password !== confirmPassword.value) {
                     valid = false;
+                    confirmPasswordError.style.display = 'block';
                     confirmPassword.classList.add('error');
-                    alert("Passwords do not match!");
                 } else {
+                    confirmPasswordError.style.display = 'none';
                     confirmPassword.classList.remove('error');
                 }
 
@@ -298,7 +383,7 @@
                     e.preventDefault();
                 }
             });
-        
+        });
     </script>
 </head>
 
@@ -310,7 +395,7 @@
         </div>
         
         <div class="form-body">
-            <form id="registration-form" action="/PMS/CustomerRegistration" method="post" onsubmit="return validateForm()">
+            <form id="registration-form" action="/PMS/CustomerRegistration" method="post">
                 <div class="form-group">
                     <label for="name">Full Name</label>
                     <div class="icon-input">
@@ -366,6 +451,24 @@
                     <div class="password-strength">
                         <div class="password-strength-bar"></div>
                     </div>
+                    <div class="password-requirements">
+                        <div class="requirement invalid" id="length-req">
+                            <i class="fas fa-times-circle"></i> At least 8 characters
+                        </div>
+                        <div class="requirement invalid" id="upper-req">
+                            <i class="fas fa-times-circle"></i> At least one uppercase letter
+                        </div>
+                        <div class="requirement invalid" id="lower-req">
+                            <i class="fas fa-times-circle"></i> At least one lowercase letter
+                        </div>
+                        <div class="requirement invalid" id="number-req">
+                            <i class="fas fa-times-circle"></i> At least one number
+                        </div>
+                        <div class="requirement invalid" id="special-req">
+                            <i class="fas fa-times-circle"></i> At least one special character
+                        </div>
+                    </div>
+                    <div class="error-text" id="password-error"></div>
                 </div>
                 
                 <div class="form-group">
@@ -374,7 +477,7 @@
                         <input type="password" id="confirm-password" name="confirm-password" class="form-control" placeholder="Confirm your password" minlength="8" required>
                         <button type="button" class="password-toggle"><i class="fas fa-eye"></i></button>
                     </div>
-                    <div class="error-text" id="password-error">Passwords do not match!</div>
+                    <div class="error-text" id="confirm-password-error">Passwords do not match!</div>
                 </div>
                 
                 <div class="form-group">
