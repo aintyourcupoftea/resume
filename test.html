@@ -1,95 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            margin-top: 50px;
-        }
-        form {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-        }
-        input {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .error {
-            color: red;
-            font-size: 14px;
-            display: none;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-    </style>
-</head>
-<body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("registration_form");
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirm_password");
+        const passwordError = document.getElementById("password_error");
 
-    <form id="registrationForm">
-        <h2>Register</h2>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <span id="passwordError" class="error">
-            Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.
-        </span>
-        <br>
-        <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" required>
-        <span id="confirmPasswordError" class="error">Passwords do not match.</span>
-        <br>
-        <button type="submit">Submit</button>
-    </form>
+        form.addEventListener("submit", function (e) {
+            const passwordValue = password.value;
+            const confirmPasswordValue = confirmPassword.value;
 
-    <script>
-        document.getElementById("registrationForm").addEventListener("submit", function(event) {
-            const password = document.getElementById("password").value;
-            const confirmPassword = document.getElementById("confirmPassword").value;
-            const passwordError = document.getElementById("passwordError");
-            const confirmPasswordError = document.getElementById("confirmPasswordError");
-
+            // Password validation regex: At least 1 uppercase, 1 lowercase, 1 special character, 1 number, min 8 characters
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-            let valid = true;
 
-            if (!passwordRegex.test(password)) {
-                passwordError.style.display = "inline";
-                valid = false;
+            if (!passwordRegex.test(passwordValue)) {
+                e.preventDefault(); // Prevent form submission
+                passwordError.style.display = "block";
+                passwordError.textContent =
+                    "Password must be at least 8 characters long, include 1 uppercase, 1 lowercase, 1 number, and 1 special character.";
+                password.classList.add("error-shake");
+                setTimeout(() => password.classList.remove("error-shake"), 500);
+                return;
             } else {
                 passwordError.style.display = "none";
             }
 
-            if (password !== confirmPassword) {
-                confirmPasswordError.style.display = "inline";
-                valid = false;
-            } else {
-                confirmPasswordError.style.display = "none";
-            }
-
-            if (!valid) {
-                event.preventDefault(); // Prevent form submission
+            // Confirm password validation
+            if (passwordValue !== confirmPasswordValue) {
+                e.preventDefault();
+                passwordError.style.display = "block";
+                passwordError.textContent = "Passwords do not match.";
+                confirmPassword.classList.add("error-shake");
+                setTimeout(() => confirmPassword.classList.remove("error-shake"), 500);
+                return;
             }
         });
-    </script>
-
-</body>
-</html>
+    });
+</script>
