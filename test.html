@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary: #5e60ce;
+            --primary-dark: #4e54c8;
+            --secondary: #64dfdf;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --danger: #ef476f;
+            --success: #06d6a0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            background-color: var(--light);
+            border-radius: 12px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .form-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .form-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(94, 96, 206, 0.2);
+        }
+
+        .icon-input {
+            position: relative;
+        }
+
+        .icon-input i {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .icon-input input {
+            padding-left: 2.5rem;
+        }
+
+        .phone-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .phone-group select {
+            flex: 0 0 120px;
+        }
+
+        .phone-group input {
+            flex: 1;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .password-strength {
+            height: 5px;
+            margin-top: 0.5rem;
+            border-radius: 5px;
+            background: #eee;
+            overflow: hidden;
+            display: none;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: width 0.3s;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background-color: #e9ecef;
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: #dde2e6;
+        }
+
+        .error-text {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .form-footer {
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-top: 1px solid #eee;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Password visibility toggle
+            const togglePasswordBtns = document.querySelectorAll('.password-toggle');
+            togglePasswordBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const passwordField = this.previousElementSibling;
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+                    this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                });
+            });
+
+            // Password strength meter
+            const passwordField = document.getElementById('password');
+            const strengthBar = document.querySelector('.password-strength-bar');
+            const strengthMeter = document.querySelector('.password-strength');
+
+            passwordField.addEventListener('input', function(e) {
+                const value = this.value;
+                if (value.length > 0) {
+                    strengthMeter.style.display = 'block';
+                    
+                    // Calculate strength
+                    let strength = 0;
+                    if (value.length > 6) strength += 20;
+                    if (value.length > 10) strength += 20;
+                    if (/[a-z]/.test(value)) strength += 10;
+                    if (/[A-Z]/.test(value)) strength += 10;
+                    if (/[0-9]/.test(value)) strength += 20;
+                    if (/[^A-Za-z0-9]/.test(value)) strength += 20;
+
+                    // Update strength bar
+                    strengthBar.style.width = `${strength}%`;
+                    
+                    // Set color based on strength
+                    if (strength < 40) {
+                        strengthBar.style.backgroundColor = '#ef476f';
+                    } else if (strength < 70) {
+                        strengthBar.style.backgroundColor = '#ffd166';
+                    } else {
+                        strengthBar.style.backgroundColor = '#06d6a0';
+                    }
+                } else {
+                    strengthMeter.style.display = 'none';
+                }
+            });
+
+            // Form validation
+            const form = document.getElementById('registration-form');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirm-password');
+            const passwordError = document.getElementById('password-error');
+         // Password regex pattern: At least one letter, one number, and between 6-30 characters
+            const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{6,30}$/;
+
+            form.addEventListener('submit', function (e) {
+                let valid = true;
+
+                // Validate password pattern
+                if (!passwordPattern.test(password.value)) {
+                    valid = false;
+                    console.log("Hello");
+                    passwordError.textContent = "Password must be 6-30 characters and include at least one letter and one number.";
+                    passwordError.style.display = 'block';
+                    password.classList.add('error');
+                } else {
+                    passwordError.style.display = 'none';
+                    password.classList.remove('error');
+                }
+
+                // Validate password match
+                if (password.value !== confirmPassword.value) {
+                    valid = false;
+                    confirmPassword.classList.add('error');
+                    alert("Passwords do not match!");
+                } else {
+                    confirmPassword.classList.remove('error');
+                }
+
+                // Prevent form submission if validation fails
+                if (!valid) {
+                    e.preventDefault();
+                }
+            });
+        
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-header">
+            <h2>Sign up to ParcelPro</h2>
+            <p>Create your account to get started</p>
+        </div>
+        
+        <div class="form-body">
+            <form id="registration-form" action="/PMS/CustomerRegistration" method="post" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <div class="icon-input">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="icon-input">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="you@example.com" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="mobile">Mobile Number</label>
+                    <div class="phone-group">
+                        <select name="code" id="code" class="form-control" required>
+                            <option value="+1">+1 (USA)</option>
+                            <option value="+44">+44 (UK)</option>
+                            <option value="+91">+91 (India)</option>
+                            <option value="+49">+49 (Germany)</option>
+                            <option value="+61">+61 (Australia)</option>
+                        </select>
+                        <div class="icon-input">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="mobile" name="mobile" class="form-control" pattern="\d{10}" placeholder="10-digit number" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" class="form-control" rows="3" placeholder="Enter your full address" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userid">Username</label>
+                    <div class="icon-input">
+                        <i class="fas fa-at"></i>
+                        <input type="text" id="userid" name="userid" class="form-control" placeholder="Choose a unique username" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Create a secure password" minlength="8" required>
+                        <button type="button" class="password-toggle"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="password-strength">
+                        <div class="password-strength-bar"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirm-password" name="confirm-password" class="form-control" placeholder="Confirm your password" minlength="8" required>
+                        <button type="button" class="password-toggle"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="error-text" id="password-error">Passwords do not match!</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="preferences">Preferences (Optional)</label>
+                    <textarea id="preferences" name="preferences" class="form-control" rows="3" placeholder="Tell us about your preferences"></textarea>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                    <button type="reset" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="form-footer">
+            By registering, you agree to our Terms of Service and Privacy Policy
+        </div>
+    </div>
+</body>
+</html>
