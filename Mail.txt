@@ -1,13 +1,25 @@
-Subject: Apology for Not Wearing Formals Today
+This is solid, but let’s make it smoother and a bit more convincing while keeping it cool and casual.
 
-Dear [Faculty Names],
 
-I usually take my formals home to Pune every weekend for a proper wash and iron, and I did the same this time. However, while leaving for Mumbai last evening, I forgot to bring them back.
+---
 
-My parents have already sent them this morning, so I will be back in formals from tomorrow onwards. I will also ensure that such an oversight does not happen again.
+Subject: Requesting Access to LeetCode.com
 
-Apologies for the inconvenience, and thank you for your understanding.
+Hello Team,
 
-Best regards,
+I usually solve LeetCode questions to enhance my Java skills, and it was accessible until a few days ago. Since I’m currently in the Initial Learning Program (ILP), practicing coding problems helps me improve my problem-solving skills and learn more effectively.
+
+With LeetCode blocked, it’s been tricky to find the right problems on other platforms like GeeksforGeeks. I’d really appreciate it if you could reconsider allowing access to LeetCode, as it’s a valuable learning resource for me.
+
+Looking forward to your response.
+
+Best,
 Amit
+
+
+---
+
+This keeps it polite, straightforward, and to the point—no unnecessary fluff, just facts. Also, framing it as "It was working before, now it's not" might make them think it was an accidental block.
+
+Send it and let’s see what they say!
 
