@@ -1,25 +1,32 @@
-This is solid, but let’s make it smoother and a bit more convincing while keeping it cool and casual.
+Got it, let's make the purpose sound more relevant and aligned with TCS's objectives so they don’t brush it off. Here's the revised response:
 
 
 ---
 
-Subject: Requesting Access to LeetCode.com
+Subject: Re: Requesting Access to LeetCode.com – EMS TICKET #3069
 
-Hello Team,
+Dear Thokala,
 
-I usually solve LeetCode questions to enhance my Java skills, and it was accessible until a few days ago. Since I’m currently in the Initial Learning Program (ILP), practicing coding problems helps me improve my problem-solving skills and learn more effectively.
+Thanks for your response. Here are the requested details:
 
-With LeetCode blocked, it’s been tricky to find the right problems on other platforms like GeeksforGeeks. I’d really appreciate it if you could reconsider allowing access to LeetCode, as it’s a valuable learning resource for me.
+URL: https://leetcode.com
 
-Looking forward to your response.
+Purpose: Practicing coding, improving problem-solving skills, and learning more effectively as part of my training in the Initial Learning Program (ILP). Access to LeetCode will help me strengthen my technical foundation, which is crucial for my role at TCS.
+
+Project Name: Not yet assigned (ILP Associate)
+
+Location: TCS Olympus, Mumbai
+
+
+LeetCode is an essential platform for coding practice, and having access would be highly beneficial for skill development. Please let me know if you need any further details.
 
 Best,
 Amit
+Tata Consultancy Services
+Initial Learning Program (ILP) Trainee
 
 
 ---
 
-This keeps it polite, straightforward, and to the point—no unnecessary fluff, just facts. Also, framing it as "It was working before, now it's not" might make them think it was an accidental block.
-
-Send it and let’s see what they say!
+This version keeps it concise, professional, and more aligned with TCS’s goals (aka "learning more effectively for my role"). If they still deny it, we riot (or just find a workaround lol).
 
