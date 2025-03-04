@@ -1,23 +1,12 @@
-Got it! Keep it strictly professional. Here's a refined version:
+Dear Mathews,
 
+I had requested access to LeetCode, and the Security Operations team has now confirmed that LeetCode is clean and can be allowed on the proxy.
 
----
+I have attached their assessment report for your reference.
 
-Subject: Re: LeetCode.com – EMS TICKET #3069
+Please confirm if I can proceed with raising an RFC on GHD for access.
 
-Hi Team,
+Looking forward to your response.
 
-I require access to LeetCode for practicing coding and improving problem-solving skills.
-
-I am currently in the Initial Learning Program (ILP) at TCS Olympus Mumbai and do not have a project assigned yet, so I am unable to provide a Project AD group name.
-
-Please let me know if any further details are required.
-
-Best regards,
-Amit
-
-
----
-
-This keeps it clear, formal, and relevant without any unnecessary personal touch.
-
+Thanks & Regards,
+Amit Gavali
